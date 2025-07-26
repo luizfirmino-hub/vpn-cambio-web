@@ -17,12 +17,8 @@
     .erro { margin-top: 10px; color: red; text-align: center; }
   </style>
 </head>
-<body style="background-color: #2f4f2f;">
-    <div style="text-align: right; padding: 10px 20px;">
-      <span style="color: white; font-weight: bold; cursor: pointer;" onclick="setIdioma('pt')">PT</span>
-      <span style="color: white; font-weight: bold;"> | </span>
-      <span style="color: white; font-weight: bold; cursor: pointer;" onclick="setIdioma('es')">ES</span>
-    </div>
+<body style="background-color: white;">
+    
   <div class="container">
     <img src="vpn_logo_web.png" alt="VPN Logo">
     <h1 id="slogan">Transferência fácil, rápida e segura.</h1>
@@ -116,10 +112,6 @@ function setIdioma(idioma) {
       (idioma === "pt" ? "Valor a ser recebido" : "Valor a recibir") + ":" + valor;
   }
 }
-
-document.addEventListener("DOMContentLoaded", function () {
-  setIdioma("pt");
-});
 </script>
 </body>
 </html>
