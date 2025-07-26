@@ -18,6 +18,11 @@
   </style>
 </head>
 <body style="background-color: #2f4f2f;">
+    <div style="text-align: right; padding: 10px 20px;">
+      <span style="color: white; font-weight: bold; cursor: pointer;" onclick="setIdioma('pt')">PT</span>
+      <span style="color: white; font-weight: bold;"> | </span>
+      <span style="color: white; font-weight: bold; cursor: pointer;" onclick="setIdioma('es')">ES</span>
+    </div>
   <div class="container">
     <img src="vpn_logo_web.png" alt="VPN Logo">
     <h1 id="slogan">Transferência fácil, rápida e segura.</h1>
@@ -34,13 +39,7 @@
     <button onclick="converter()">Converter</button>
 
     <div class="resultado" id="resultado">Valor a ser recebido:</div>
-    <div class="erro" id="erro">
-    <label for="idioma">Idioma:</label>
-    <select id="idioma" onchange="trocarIdioma()">
-      <option value="pt" selected>Português</option>
-      <option value="es">Español</option>
-    </select>
-    </div>
+    <div class="erro" id="erro"></div>
   </div>
 
 
@@ -87,7 +86,22 @@
       resultadoEl.textContent = `Resultado: ${resultado.toFixed(2)}`;
     }
   
-function trocarIdioma() {
+
+function setIdioma(idioma) {
+  document.getElementById("slogan").textContent =
+    idioma === "pt" ? "Transferência fácil, rápida e segura." : "Transferencia fácil, rápida y segura.";
+  document.getElementById("label-valor").textContent =
+    idioma === "pt" ? "Valor a ser transferido:" : "Valor a transferir:";
+  document.querySelector("button").textContent =
+    idioma === "pt" ? "Converter" : "Convertir";
+  const resultado = document.getElementById("resultado").textContent;
+  if (resultado.includes(":")) {
+    const [prefixo, valor] = resultado.split(":");
+    document.getElementById("resultado").textContent =
+      (idioma === "pt" ? "Valor a ser recebido" : "Valor a recibir") + ":" + valor;
+  }
+}
+
   const idioma = document.getElementById("idioma").value;
   document.getElementById("slogan").textContent =
     idioma === "pt" ? "Transferência fácil, rápida e segura." : "Transferencia fácil, rápida y segura.";
