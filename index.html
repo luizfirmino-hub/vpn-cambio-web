@@ -1,117 +1,99 @@
 
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>VPN Câmbio - CurrencyFreaks</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f2f2f2; }
-    .container { max-width: 500px; margin: auto; background: white; border-radius: 10px; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    img { display: block; margin: 0 auto 20px; max-width: 150px; }
-    h1 { text-align: center; color: #2f4f2f; }
-    label, select, input, button { display: block; width: 100%; margin-top: 15px; font-size: 1rem; }
-    input, select { padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
-    button { padding: 12px; background: #a4292f; color: white; border: none; border-radius: 5px; cursor: pointer; }
-    .resultado { margin-top: 20px; font-size: 1.3em; text-align: center; color: #355d3a; font-weight: bold; }
-    .erro { margin-top: 10px; color: red; text-align: center; }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>VPN Câmbio</title>
+    <style>
+        body {
+            background-color: #2f4f2f;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 500px;
+            margin: 40px auto;
+            background-color: #EEEDE8;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .logo {
+            max-width: 80%;
+            margin-bottom: 20px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: 1px solid #aaa;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #006400;
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #004d00;
+        }
+        .resultado {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
 </head>
-<body style="background-color: #2f4f2f;">
-    
-  <div class="container">
-    <img src="vpn_logo_web.png" alt="VPN Logo">
-    <h1 id="slogan">Transferência fácil, rápida e segura.</h1>
+<body>
+    <div class="container">
+        <img src="vpn_logo_web.png" alt="VPN Logo" class="logo" />
+        <h2>Simulação de Câmbio</h2>
+        <label for="direction">Direção:</label>
+        <select id="direction">
+            <option value="mxn_brl">Pesos → Reais</option>
+            <option value="brl_mxn">Reais → Pesos</option>
+        </select>
+        <label for="valor">Valor a ser transferido:</label>
+        <input type="number" id="valor" placeholder="Digite o valor" />
+        <button onclick="converter()">Converter</button>
+        <div class="resultado" id="resultado"></div>
+    </div>
 
-    <label for="valor" id="label-valor">Valor a ser transferido:</label>
-    <input type="number" id="valor" placeholder="Digite o valor"/>
+    <script>
+        async function converter() {
+            const valor = parseFloat(document.getElementById('valor').value);
+            const direction = document.getElementById('direction').value;
+            if (isNaN(valor) || valor <= 0) {
+                document.getElementById('resultado').innerText = "Informe um valor válido.";
+                return;
+            }
 
-    <label for="direcao">Conversão:</label>
-    <select id="direcao">
-      <option value="brl_mxn" selected>BRL para MXN</option>
-      <option value="mxn_brl">MXN para BRL</option>
-    </select>
+            try {
+                const res = await fetch("https://api.currencyfreaks.com/v2.0/rates/latest?apikey=cb55438ef511497398e92e3ab2a22817");
+                const data = await res.json();
+                const rates = data.rates;
+                let resultado = 0;
 
-    <button onclick="converter()">Converter</button>
+                if (direction === "mxn_brl") {
+                    const mxn_brl = parseFloat(rates.BRL) / parseFloat(rates.MXN);
+                    resultado = valor * mxn_brl * 0.97;
+                } else {
+                    const brl_mxn = parseFloat(rates.MXN) / parseFloat(rates.BRL);
+                    resultado = valor * brl_mxn * 0.97;
+                }
 
-    <div class="resultado" id="resultado">Valor a ser recebido:</div>
-    <div class="erro" id="erro"></div>
-  </div>
-
-
-  <script>
-    const API_KEY = "cb55438ef511497398e92e3ab2a22817";
-
-    async function obterCotacao() {
-      try {
-        const res = await fetch(`https://api.currencyfreaks.com/latest?apikey=${API_KEY}&symbols=MXN,BRL`);
-        const data = await res.json();
-        const brl = parseFloat(data.rates.BRL);
-        const mxn = parseFloat(data.rates.MXN);
-        const cotacao = mxn / brl;
-        return cotacao;
-      } catch (e) {
-        document.getElementById("erro").textContent = "Erro ao buscar a cotação.";
-        return null;
-      }
-    }
-
-    async function converter() {
-      const valor = parseFloat(document.getElementById("valor").value);
-      const direcao = document.getElementById("direcao").value;
-      const resultadoEl = document.getElementById("resultado");
-      const erroEl = document.getElementById("erro");
-      resultadoEl.textContent = "";
-      erroEl.textContent = "";
-
-      if (isNaN(valor) || valor <= 0) {
-        erroEl.textContent = "Por favor, insira um valor válido.";
-        return;
-      }
-
-      const cotacao = await obterCotacao();
-      if (!cotacao) return;
-
-      let resultado = 0;
-      if (direcao === "brl_mxn") {
-        resultado = valor * cotacao * 0.97;
-      } else {
-        resultado = valor / (cotacao * 1.03);
-      }
-
-      resultadoEl.textContent = `Resultado: ${resultado.toFixed(2)}`;
-    }
-  
-
-function setIdioma(idioma) {
-  document.getElementById("slogan").textContent =
-    idioma === "pt" ? "Transferência fácil, rápida e segura." : "Transferencia fácil, rápida y segura.";
-  document.getElementById("label-valor").textContent =
-    idioma === "pt" ? "Valor a ser transferido:" : "Valor a transferir:";
-  document.querySelector("button").textContent =
-    idioma === "pt" ? "Converter" : "Convertir";
-  const resultado = document.getElementById("resultado").textContent;
-  if (resultado.includes(":")) {
-    const [prefixo, valor] = resultado.split(":");
-    document.getElementById("resultado").textContent =
-      (idioma === "pt" ? "Valor a ser recebido" : "Valor a recibir") + ":" + valor;
-  }
-}
-
-  const idioma = document.getElementById("idioma").value;
-  document.getElementById("slogan").textContent =
-    idioma === "pt" ? "Transferência fácil, rápida e segura." : "Transferencia fácil, rápida y segura.";
-  document.getElementById("label-valor").textContent =
-    idioma === "pt" ? "Valor a ser transferido:" : "Valor a transferir:";
-  document.querySelector("button").textContent =
-    idioma === "pt" ? "Converter" : "Convertir";
-  const resultado = document.getElementById("resultado").textContent;
-  if (resultado.includes(":")) {
-    const [prefixo, valor] = resultado.split(":");
-    document.getElementById("resultado").textContent =
-      (idioma === "pt" ? "Valor a ser recebido" : "Valor a recibir") + ":" + valor;
-  }
-}
-</script>
+                document.getElementById('resultado').innerText = `Valor a ser recebido: ${resultado.toFixed(2)}`;
+            } catch (error) {
+                document.getElementById('resultado').innerText = "Erro ao buscar a cotação.";
+            }
+        }
+    </script>
 </body>
 </html>
