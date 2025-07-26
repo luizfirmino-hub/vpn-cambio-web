@@ -117,10 +117,10 @@
 
                 if (direction === "mxn_brl") {
                     const mxn_brl = parseFloat(rates.BRL) / parseFloat(rates.MXN);
-                    resultado = valor * mxn_brl * 0.969;
+                    resultado = valor * mxn_brl * 0.9695;
                 } else {
                     const brl_mxn = parseFloat(rates.MXN) / parseFloat(rates.BRL);
-                    resultado = valor * brl_mxn * 0.969;
+                    resultado = valor * brl_mxn * 0.9695;
                 }
 
                 document.getElementById('resultado').value = resultado.toFixed(2);
