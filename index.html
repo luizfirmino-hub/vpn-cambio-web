@@ -11,28 +11,50 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            color: #333;
+            color: #013220;
         }
         .container {
             max-width: 500px;
-            margin: 40px auto;
             background-color: #ffffff;
-            padding: 30px;
+            margin: 30px auto;
+            padding: 5px 30px 35px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             text-align: center;
         }
         .logo {
-            width: 60%;
-            margin-bottom: 20px;
+            width: 48%;
+            margin: 0 auto 5px auto;
         }
-        input, select, button {
-            width: 100%;
+        .slogan {
+            font-size: 20px;
+            font-weight: bold;
+            color: #006400;
+            margin: 0 0 10px;
+        }
+        .form-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-row label {
+            flex: 1;
+            margin-right: 10px;
+            text-align: left;
+            font-weight: bold;
+        }
+        .form-row select,
+        .form-row input,
+        .form-row button {
+            flex: 2;
             padding: 12px;
-            margin-top: 10px;
-            border: 1px solid #aaa;
-            border-radius: 5px;
             font-size: 16px;
+            border-radius: 5px;
+        }
+        select, input {
+            border: 1px solid #aaa;
         }
         button {
             background-color: #006400;
@@ -44,9 +66,8 @@
         button:hover {
             background-color: #004d00;
         }
-        .resultado {
-            margin-top: 20px;
-            font-size: 18px;
+        .form-row.resultado input {
+            background-color: #f3f3f3;
             font-weight: bold;
         }
     </style>
@@ -54,16 +75,30 @@
 <body>
     <div class="container">
         <img src="vpn_logo_web.png" alt="VPN Logo" class="logo" />
-        <h2>Simulação de Câmbio</h2>
-        <label for="direction">Direção:</label>
-        <select id="direction">
-            <option value="mxn_brl">Pesos → Reais</option>
-            <option value="brl_mxn">Reais → Pesos</option>
-        </select>
-        <label for="valor">Valor a ser transferido:</label>
-        <input type="number" id="valor" placeholder="Digite o valor" />
-        <button onclick="converter()">Converter</button>
-        <div class="resultado" id="resultado"></div>
+        <div class="slogan">Transferência fácil, rápida e segura</div>
+
+        <div class="form-row">
+            <label for="direction">Origem → Destino</label>
+            <select id="direction">
+                <option value="mxn_brl">Pesos → Reais</option>
+                <option value="brl_mxn">Reais → Pesos</option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <label for="valor">Enviar</label>
+            <input type="number" id="valor" placeholder="Digite o valor" />
+        </div>
+
+        <div class="form-row">
+            <label></label>
+            <button onclick="converter()">Converter</button>
+        </div>
+
+        <div class="form-row resultado">
+            <label for="resultado">Receber</label>
+            <input type="text" id="resultado" readonly />
+        </div>
     </div>
 
     <script>
@@ -71,7 +106,7 @@
             const valor = parseFloat(document.getElementById('valor').value);
             const direction = document.getElementById('direction').value;
             if (isNaN(valor) || valor <= 0) {
-                document.getElementById('resultado').innerText = "Informe um valor válido.";
+                document.getElementById('resultado').value = "Informe um valor válido.";
                 return;
             }
 
@@ -89,9 +124,9 @@
                     resultado = valor * brl_mxn * 0.97;
                 }
 
-                document.getElementById('resultado').innerText = `Valor a ser recebido: ${resultado.toFixed(2)}`;
+                document.getElementById('resultado').value = resultado.toFixed(2);
             } catch (error) {
-                document.getElementById('resultado').innerText = "Erro ao buscar a cotação.";
+                document.getElementById('resultado').value = "Erro ao buscar a cotação.";
             }
         }
     </script>
