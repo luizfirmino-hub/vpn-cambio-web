@@ -113,9 +113,9 @@
   <script>
     async function obterCotacao() {
       try {
-        const response = await fetch('https://api.exchangerate.host/latest?base=BRL&symbols=MXN');
+        const response = await fetch('https://api.exchangerate.host/convert?from=BRL&to=MXN');
         const data = await response.json();
-        return data.rates.MXN;
+        return data.result;
       } catch (error) {
         document.getElementById("erro").textContent = "Erro ao buscar a cotação.";
         return null;
