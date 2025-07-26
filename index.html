@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -118,10 +117,10 @@
 
                 if (direction === "mxn_brl") {
                     const mxn_brl = parseFloat(rates.BRL) / parseFloat(rates.MXN);
-                    resultado = valor * mxn_brl * 0.97;
+                    resultado = valor * mxn_brl * 0.969;
                 } else {
                     const brl_mxn = parseFloat(rates.MXN) / parseFloat(rates.BRL);
-                    resultado = valor * brl_mxn * 0.97;
+                    resultado = valor * brl_mxn * 0.969;
                 }
 
                 document.getElementById('resultado').value = resultado.toFixed(2);
